@@ -1,0 +1,17 @@
+<div class="publishers-container">
+  <div>
+    <button (click)="showAddPublisherForm = true">Add Publisher</button>
+  </div>
+
+  <div *ngIf="showAddPublisherForm">
+    <form (submit)="addPublisher(publisherName.value); publisherName.value='';">
+      <input type="text" #publisherName placeholder="Enter publisher name" required>
+      <button type="submit">Submit</button>
+      <button type="button" (click)="showAddPublisherForm = false">Cancel</button>
+    </form>
+  </div>
+
+  <div>
+    <app-publisher-card *ngFor="let publisher of data" [publisher]="publisher" [allPublishers]="data"></app-publisher-card>
+  </div>
+</div>

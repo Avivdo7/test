@@ -1,0 +1,19 @@
+<div class="domain-card-container">
+  <div>URL: {{domain.domain}}</div>
+  <div>Mobile Ads: {{domain.mobileAds}}</div>
+  <div>Desktop Ads: {{domain.desktopAds}}</div>
+</div>
+<div>
+  <button (click)="toggleEdit()">Edit</button>
+</div>
+<div class="form" *ngIf="isEdit">
+  <div> Domain:</div>
+  <input type="text" [(ngModel)]="_domain.domain">
+  <div> Mobile Ads:</div>
+  <input type="text" [(ngModel)]="_domain.mobileAds">
+  <div> Desktop Ads:</div>
+  <input type="text" [(ngModel)]="_domain.desktopAds">
+  <br>
+  <button (click)="editDomain()">Save</button>
+</div>
+

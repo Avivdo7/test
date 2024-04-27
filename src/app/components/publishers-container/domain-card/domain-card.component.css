@@ -1,0 +1,41 @@
+.domain-card-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto;
+  width: 75%;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  padding: 15px;
+}
+
+.domain-card-container .form {
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  margin-top: 10px;
+}
+
+.domain-card-container input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.domain-card-container button {
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.domain-card-container button:hover {
+  background-color: #45a049;
+}

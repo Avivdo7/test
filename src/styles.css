@@ -1,0 +1,40 @@
+/* You can add global styles to this file, and also import other style files */
+
+button {
+  background-color: #4CAF50; 
+  color: white; 
+  padding: 14px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049; 
+}
+
+input[type="text"], input[type="password"], textarea {
+  width: 30%;
+  padding: 8px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form {
+  margin-top: 20px;
+}
+
+div.form-container {
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: Arial, sans-serif; 
+  color: #333;
+}

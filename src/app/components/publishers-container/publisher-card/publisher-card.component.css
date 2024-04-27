@@ -1,0 +1,42 @@
+.publisher-card-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  background-color: #F9F9F9;
+  overflow: hidden;
+  margin: 25px 0;
+  padding: 15px;
+}
+
+.publisher-card-container h1 {
+  color: #345666;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.publisher-card-container button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.publisher-card-container button:hover {
+  background-color: #45a049;
+}
+
+.app-domain-card {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+}
