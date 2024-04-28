@@ -1,52 +1,102 @@
 const express = require("express");
 const router = express.Router();
+const {publishers} = require("../dataStore")
 
-let publishers = []; // Array of publisher names
-
-// Retrieve all publishers
+// Retrieve all domains
 router.get("/", (req, res) => {
-  res.json(publishers);
+  let allDomains = [];
+  publishers.forEach(pub => {
+    pub.domains.forEach(domain => {
+      if (!allDomains.some(d => d.domain === domain.domain)) {
+        allDomains.push(domain);
+      }
+    });
+  });
+  res.json(allDomains);
 });
 
-// Create a new publisher
+router.get('/check-unique', (req, res) => {
+  const { name } = req.query;
+  const domainExists = publishers.some(publisher =>
+    publisher.domains.some(domain => domain.domain.toLowerCase() === name.toLowerCase())
+  );
+
+  res.json(!domainExists);
+});
+
+// Create a new domain
 router.post("/", (req, res) => {
-  const { name } = req.body;
-  if (!publishers.includes(name)) {
-    publishers.push(name);
-    res.status(201).json({ name });
-  } else {
-    console.log(publishers);
-    res.status(409).send("Publisher name already exists");
+  const { domain, desktopAds, mobileAds, publisher } = req.body;
+  
+  const domainExists = publishers.some(publisher => 
+    publisher.domains.some(dom => dom.domain === domain));
+
+  if (domainExists) {
+    return res.status(409).send("Domain name already exists in the system");
   }
+
+  const publisherObj = publishers.find(pub => pub.publisher === publisher);
+  if (!publisherObj) {
+    return res.status(404).send("Publisher not found");
+  }
+
+  if (desktopAds < 0 || mobileAds < 0) {
+    return res.status(400).send("desktopAds and mobileAds must be positive numbers");
+  }
+
+  publisherObj.domains.push({ domain, desktopAds, mobileAds });
+  res.status(201).json({ domain, desktopAds, mobileAds });
 });
 
-// Update a specific publisher
+
+// Update a specific publisher's domain
 router.put("/:oldName", (req, res) => {
-  const { oldName } = req.params;
-  const { newName } = req.body;
-  const index = publishers.indexOf(oldName);
-  if (index !== -1) {
-    if (!publishers.includes(newName)) {
-      publishers[index] = newName;
-      res.json({ newName });
-    } else {
-      res.status(409).send("New publisher name already exists");
-    }
-  } else {
-    res.status(404).send("Publisher not found");
+  const { oldName, newName, desktopAds, mobileAds, publisherName } = req.body;
+
+  const publisher = publishers.find(pub => pub.publisher === publisherName);
+  if (!publisher) {
+    return res.status(404).send("Publisher not found");
   }
+
+  if (desktopAds < 0 || mobileAds < 0) {
+    return res.status(400).send("desktopAds and mobileAds must be positive numbers");
+  }
+
+  const domainIndex = publisher.domains.findIndex(domain => domain.domain === oldName);
+  if (domainIndex === -1) {
+    return res.status(404).send("Domain not found");
+  }
+
+  const domainExists = publishers.some(publisher => 
+    publisher.domains.some(dom => dom.domain === newName));
+
+  if (domainExists) {
+    return res.status(409).send("New domain name already exists within another publisher");
+  }
+
+  publisher.domains[domainIndex] = { domain: newName, desktopAds, mobileAds };
+  res.json({ domain: newName, desktopAds, mobileAds });
 });
 
-// Delete a specific publisher
+
+// Delete a specific publisher domain
 router.delete("/:name", (req, res) => {
-  const { name } = req.params;
-  const index = publishers.indexOf(name);
-  if (index !== -1) {
-    publishers.splice(index, 1);
+  const { domainName, publisherName } = req.body;
+
+  const publisher = publishers.find(pub => pub.publisher === publisherName);
+  if (!publisher) {
+    return res.status(404).send("Publisher not found");
+  }
+
+  const domainIndex = publisher.domains.findIndex(domain => domain.domain === domainName);
+
+  if (domainIndex !== -1) {
+    publisher.domains.splice(domainIndex, 1);
     res.status(204).send();
   } else {
-    res.status(404).send("Publisher not found");
+    res.status(404).send("Domain not found");
   }
 });
+
 
 module.exports = router;

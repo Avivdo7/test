@@ -25,6 +25,7 @@ export type Domain = {
 export class PublishersContainerComponent implements OnInit {
   showAddPublisherForm: boolean = false;
   data: Array<Publisher> = [];
+  errorMessage: string = '';
 
   constructor(private publisherService: PublisherService) {}
 
@@ -48,11 +49,52 @@ export class PublishersContainerComponent implements OnInit {
         .addPublisher({ publisher: publisherName, domains: [] })
         .subscribe({
           next: (publisher) => {
-            this.data.push(publisher); // Add the new publisher to the local array
+            this.data.push(publisher);
+            this.errorMessage = '';
           },
-          error: (err) => console.error('Error adding publisher:', err),
+          error: (error) => {
+            this.errorMessage = error.message;
+          },
         });
     }
     this.showAddPublisherForm = false;
+  }
+
+  // In PublishersContainerComponent
+
+  updatePublisher(publisher: Publisher): void {
+    const updatedDetails = {
+      publisher: publisher.publisher,
+      domains: publisher.domains,
+    };
+    this.publisherService
+      .updatePublisher(publisher.publisher, updatedDetails)
+      .subscribe({
+        next: (updatedPublisher) => {
+          const index = this.data.findIndex(
+            (p) => p.publisher === publisher.publisher
+          );
+          if (index !== -1) {
+            this.data[index] = updatedPublisher;
+          }
+        },
+        error: (error) => {
+          this.errorMessage = 'Failed to update publisher.';
+        },
+      });
+  }
+
+  deletePublisher(publisher: Publisher): void {
+    this.publisherService.deletePublisher(publisher.publisher).subscribe({
+      next: () => {
+        this.data = this.data.filter(
+          (p) => p.publisher !== publisher.publisher
+        );
+      },
+      error: (error) => {
+        console.error('Failed to delete publisher:', error);
+        this.errorMessage = 'Failed to delete publisher.';
+      },
+    });
   }
 }

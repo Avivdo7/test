@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable} from 'rxjs';
+import { Observable, catchError, throwError} from 'rxjs';
 import { environment } from '../../enviroments/environment';
 
 @Injectable({
@@ -16,9 +16,11 @@ export class PublisherService {
   }
 
   addPublisher(publisher: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, publisher);
+    return this.http.post<any>(`${this.apiUrl}`, publisher).pipe(
+      catchError(error => throwError(() => new Error(error.error.message || 'Publisher Already Exists')))
+    );
   }
-
+  
   updatePublisher(name: string, publisher: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${name}`, publisher);
   }

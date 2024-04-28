@@ -1,17 +1,25 @@
 <div class="publishers-container">
   <div>
-    <button (click)="showAddPublisherForm = true">Add Publisher</button>
+    <button (click)="showAddPublisherForm = !showAddPublisherForm">Add Publisher</button>
   </div>
 
   <div *ngIf="showAddPublisherForm">
     <form (submit)="addPublisher(publisherName.value); publisherName.value='';">
       <input type="text" #publisherName placeholder="Enter publisher name" required>
+      <br>
       <button type="submit">Submit</button>
-      <button type="button" (click)="showAddPublisherForm = false">Cancel</button>
     </form>
   </div>
 
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
   <div>
-    <app-publisher-card *ngFor="let publisher of data" [publisher]="publisher" [allPublishers]="data"></app-publisher-card>
+    <ng-container *ngFor="let publisher of data">
+      <app-publisher-card [publisher]="publisher" [allPublishers]="data"></app-publisher-card>
+
+      <button (click)="deletePublisher(publisher)">Delete</button>
+    </ng-container>
   </div>
 </div>

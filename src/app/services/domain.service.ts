@@ -6,25 +6,12 @@ import { environment } from '../../enviroments/environment';
 @Injectable({
   providedIn: 'root',
 })
-
 export class DomainService {
-  private apiUrl = `${environment.apiUrl}/domains`;
-
   constructor(private http: HttpClient) {}
 
-  getAllDomains(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  isDomainUnique(domainName: string): Observable<boolean> {
+    const url = `${environment.apiUrl}/domains/check-unique?name=${domainName}`;
+    return this.http.get<boolean>(url);
   }
-
-  addDomain(domain: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, domain);
-  }
-
-  updateDomain(id: number, domain: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, domain);
-  }
-
-  deleteDomain(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
-  }
+  
 }

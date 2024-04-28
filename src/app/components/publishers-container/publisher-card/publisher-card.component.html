@@ -1,17 +1,17 @@
 <div>
-  <h1>{{publisher.publisher}} ({{publisher.domains.length}})</h1>
+  <h1>{{ publisher.publisher }} ({{ publisher.domains.length }})</h1>
   <button (click)="showForm = !showForm">Add Domain</button>
   <hr>
   <div *ngIf="showForm">
-    <form (submit)="addDomain(domainName.value, mobileAds.value, desktopAds.value); showForm = false">
-      <div> Domain:</div>
-      <input type="text" #domainName placeholder="Enter Domain name" required>
-      <div> Mobile Ads:</div>
-      <input type="text" #mobileAds placeholder="Enter Mobile Ads" required>
-      <div> Desktop Ads:</div>
-      <input type="text" #desktopAds placeholder="Enter Desktop Ads" required>
+    <form [formGroup]="domainForm" (ngSubmit)="addDomain(); showForm = false">
+      <div>Domain:</div>
+      <input type="text" formControlName="domain" placeholder="Enter Domain name" required>
+      <div>Mobile Ads:</div>
+      <input type="number" formControlName="mobileAds" placeholder="Enter Mobile Ads" required>
+      <div>Desktop Ads:</div>
+      <input type="number" formControlName="desktopAds" placeholder="Enter Desktop Ads" required>
       <br>
-      <button type="submit">Save</button>
+      <button type="submit" [disabled]="!domainForm.valid">Save</button>
       <button type="button" (click)="showForm = false">Cancel</button>
     </form>
   </div>
